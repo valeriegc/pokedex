@@ -6,9 +6,10 @@
 		hp: number;
 	}
 	export let pokeArr: PokeData[];
+	import { Paginator } from '@skeletonlabs/skeleton';
 </script>
 
-<div class="table-container mt-14">
+<div class="table-container mt-6">
 	<!-- Native Table Element -->
 	<table class="table table-hover">
 		<thead>
@@ -21,7 +22,7 @@
 		</thead>
 		<tbody>
 			{#each pokeArr as pokemon, i}
-				<tr>
+				<tr class="cursor-pointer">
 					<td>{pokemon.name}</td>
 					<td>{pokemon.number}</td>
 					<td>{pokemon.type}</td>
