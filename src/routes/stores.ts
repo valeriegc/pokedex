@@ -9,3 +9,5 @@ export const pokemonDisplay = writable({
 		height: 0,
 		image: ""
 })
+export const showPokeDetails = writable(false)
+export const searchTerm = writable("")

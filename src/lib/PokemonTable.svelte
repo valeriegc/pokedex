@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { loadPokemon } from '../routes/searchPokemon';
 	interface PokeData {
 		name: string;
 		number: number;
@@ -6,10 +7,10 @@
 		hp: number;
 	}
 	export let pokeArr: PokeData[];
-	import { Paginator } from '@skeletonlabs/skeleton';
+	import { searchTerm } from '../routes/stores';
 </script>
 
-<div class="table-container mt-6">
+<div class="table-container mt-6 mb-6">
 	<!-- Native Table Element -->
 	<table class="table table-hover">
 		<thead>
@@ -22,7 +23,7 @@
 		</thead>
 		<tbody>
 			{#each pokeArr as pokemon, i}
-				<tr class="cursor-pointer">
+				<tr class="cursor-pointer" on:click={() => loadPokemon(($searchTerm = pokemon.name))}>
 					<td>{pokemon.name}</td>
 					<td>{pokemon.number}</td>
 					<td>{pokemon.type}</td>

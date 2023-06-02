@@ -1,28 +1,10 @@
 <script lang="ts">
+	import { Paginator } from '@skeletonlabs/skeleton';
 	import PokemonModal from '$lib/PokemonModal.svelte';
 	import PokemonTable from '$lib/PokemonTable.svelte';
-	import { pokemonDisplay } from './stores.js';
-
+	import { pokemonDisplay, showPokeDetails, searchTerm } from './stores.js';
+	import { loadPokemon } from './searchPokemon.js';
 	export let data;
-	let showPokeDetails = true;
-	let searchTerm = '';
-
-	async function loadPokemon(searchTerm: string) {
-		const resp = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
-		const json = await resp.json();
-		const type = json.types.map((t) => t.type.name).join('/');
-		$pokemonDisplay = {
-			name: json.name.charAt(0).toUpperCase() + json.name.slice(1),
-			number: json.order,
-			type: type,
-			hp: json.stats[0].base_stat,
-			experience: json.base_experience,
-			weight: json.weight,
-			height: json.height,
-			image: json.sprites.other.dream_world.front_default
-		};
-		return { $pokemonDisplay };
-	}
 </script>
 
 <div class="px-5 max-w-4xl mx-auto mt-8">
@@ -39,17 +21,19 @@
 				title="Input (text)"
 				type="text"
 				placeholder="Search for a pokemon"
-				bind:value={searchTerm}
+				bind:value={$searchTerm}
 			/>
 			<button
 				type="button"
 				class="btn-icon variant-filled ml-2 p-2"
-				on:click={() => loadPokemon(searchTerm)}><img src="searchicon.svg" /></button
+				on:click={() => loadPokemon($searchTerm, $pokemonDisplay, $showPokeDetails)}
+				><img src="searchicon.svg" /></button
 			>
 		</div>
 	</div>
-	{#if !showPokeDetails}
+	{#if !$showPokeDetails}
 		<PokemonTable pokeArr={data.pokemons} />
+		<Paginator />
 	{:else}
 		<PokemonModal />
 	{/if}
