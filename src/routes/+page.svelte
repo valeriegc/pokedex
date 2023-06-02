@@ -1,24 +1,27 @@
 <script lang="ts">
 	import PokemonModal from '$lib/PokemonModal.svelte';
 	import PokemonTable from '$lib/PokemonTable.svelte';
+	import { pokemonDisplay } from './stores.js';
 
 	export let data;
-	let showPokeDetails = false;
+	let showPokeDetails = true;
 	let searchTerm = '';
 
 	async function loadPokemon(searchTerm: string) {
-		const resp = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
+		const resp = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
 		const json = await resp.json();
-		console.log(json);
 		const type = json.types.map((t) => t.type.name).join('/');
-		const pokemon = {
+		$pokemonDisplay = {
 			name: json.name.charAt(0).toUpperCase() + json.name.slice(1),
-			number: 0,
+			number: json.order,
 			type: type,
-			hp: json.stats[0].base_stat
+			hp: json.stats[0].base_stat,
+			experience: json.base_experience,
+			weight: json.weight,
+			height: json.height,
+			image: json.sprites.other.dream_world.front_default
 		};
-		console.log(pokemon.name);
-		return { pokemon };
+		return { $pokemonDisplay };
 	}
 </script>
 
